@@ -58,7 +58,6 @@ public class CartService {
                     .getCartItems()
                     .stream()
                     .reduce(0.0, (subtotal, e) -> subtotal + e.getProduct().getPrice() * (double)e.getQuantity(), Double::sum);
-//            System.out.println(totalPrice);
             cart.setTotalPrice(totalPrice);
             cartRepo.save(cart);
         }

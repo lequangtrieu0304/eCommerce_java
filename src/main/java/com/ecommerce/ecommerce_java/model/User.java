@@ -23,7 +23,8 @@ public class User {
     private List<WishList> wishLists;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Review> reviews;
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;

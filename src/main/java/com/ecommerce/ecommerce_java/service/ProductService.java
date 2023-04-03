@@ -44,11 +44,11 @@ public class ProductService{
         return productDtos;
     }
 
-    public void updateProduct(ProductDto productDto, Integer id) throws Exception {
+    public void updateProduct(ProductDto productDto, Integer id) {
         Optional<Product> optionalProduct = productRepo.findById(id);
         //throw an exception if product does not exist
         if(!optionalProduct.isPresent()){
-            throw new Exception("product not present");
+            throw new NotFoundException("product not present");
         }
         Product product = optionalProduct.get();
         product.setName(productDto.getName());
@@ -57,7 +57,7 @@ public class ProductService{
         productRepo.save(product);
     }
 
-    public Product findById(Integer id) {
+    public Product findById(Integer id) throws NotFoundException{
         Optional<Product> optionalProduct = productRepo.findById(id);
         if(optionalProduct.isEmpty()){
             throw new NotFoundException("Not Found Product");
