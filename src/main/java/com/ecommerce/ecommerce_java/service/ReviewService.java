@@ -7,7 +7,6 @@ import com.ecommerce.ecommerce_java.model.Review;;
 import com.ecommerce.ecommerce_java.model.User;
 import com.ecommerce.ecommerce_java.repository.ProductRepo;
 import com.ecommerce.ecommerce_java.repository.ReviewRepo;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ public class ReviewService {
     public void createReview(User user, Integer productId, String comment, int rating) {
         Product product = productRepo.findById(productId).orElseThrow(() ->
                 new NotFoundException("Not found product"));
-        List<Review> reviews = product.getReviews();
+        List<Review> reviews = reviewRepo.findByProduct(product);
         for(Review review : reviews){
             if(productReviewMap.containsKey(product.getId())){
                 Set<Integer> userIdSet = productReviewMap.get(product.getId());
@@ -48,19 +47,15 @@ public class ReviewService {
                 review.setRating(rating);
                 review.setComment(comment);
                 reviewRepo.save(review);
-                reviews.add(review);
-                product.setReviews(reviews);
-                int numReviews = product.getReviews().size();
-                int subTotalReview = product
-                        .getReviews()
-                        .stream()
-                        .reduce(0, (subTotal, r) -> subTotal + r.getRating(), Integer::sum);
+                int numReviews = reviews.size();
+                int subTotalReview = reviews
+                                    .stream()
+                                    .reduce(0, (subTotal, r) -> subTotal + r.getRating(), Integer::sum);
                 double productRating = Math.round((double) subTotalReview/numReviews * 10.0)/10.0;
                 product.setRating(productRating);
                 product.setNumberReviews(numReviews);
                 productRepo.save(product);
             }
-
         }
         else {
             Review review = new Review();
@@ -70,8 +65,6 @@ public class ReviewService {
             review.setComment(comment);
             reviewRepo.save(review);
 
-            reviews.add(review);
-            product.setReviews(reviews);
             product.setRating(rating);
             product.setNumberReviews(1);
             productRepo.save(product);

@@ -9,9 +9,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cart_id;
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<CartItems> cartItems;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User user;
     private double totalPrice;
@@ -25,14 +23,6 @@ public class Cart {
 
     public void setCart_id(Integer cart_id) {
         this.cart_id = cart_id;
-    }
-
-    public List<CartItems> getCartItems() {
-        return cartItems;
-    }
-
-    public void setCartItems(List<CartItems> cartItems) {
-        this.cartItems = cartItems;
     }
 
     public User getUser() {

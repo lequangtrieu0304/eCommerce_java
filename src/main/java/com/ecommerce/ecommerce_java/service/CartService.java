@@ -28,7 +28,7 @@ public class CartService {
     public void addToCart(AddToCartDto addToCartDto, User user) {
         User userCart = userRepo.findById(user.getId()).orElseThrow(() -> new NotFoundException("NOT FOUND USER"));
         Product findProduct = productRepo.findById(addToCartDto.getProduct_id()).orElseThrow(() -> new NotFoundException("NOT FOUND PRODUCT"));
-        Cart cart = userCart.getCart();
+        Cart cart = cartRepo.findByUser(userCart.getId());
         if(cart == null){
             cart = new Cart();
             cart.setUser(userCart);

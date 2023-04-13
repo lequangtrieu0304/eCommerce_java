@@ -18,20 +18,10 @@ public class Product {
     private @NotNull String name;
     private @NotNull double price;
     private @NotNull String desciption;
-    //many to one
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name="category_id")
     Category category;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<WishList> wishlists = new ArrayList<>();
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<CartItems> cartItems;
-    @OneToMany(mappedBy = "product")
-    private List<Review> reviews;
     private double rating;
     private int numberReviews;
 
@@ -43,30 +33,6 @@ public class Product {
         this.category = category;
     }
     public Product() {
-    }
-
-    public int getNumberReviews() {
-        return numberReviews;
-    }
-
-    public void setNumberReviews(int numberReviews) {
-        this.numberReviews = numberReviews;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
     }
 
     public Integer getId() {
@@ -109,19 +75,19 @@ public class Product {
         this.category = category;
     }
 
-    public List<WishList> getWishlists() {
-        return wishlists;
+    public double getRating() {
+        return rating;
     }
 
-    public void setWishlists(List<WishList> wishlists) {
-        this.wishlists = wishlists;
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
-    public List<CartItems> getCartItems() {
-        return cartItems;
+    public int getNumberReviews() {
+        return numberReviews;
     }
 
-    public void setCartItems(List<CartItems> cartItems) {
-        this.cartItems = cartItems;
+    public void setNumberReviews(int numberReviews) {
+        this.numberReviews = numberReviews;
     }
 }

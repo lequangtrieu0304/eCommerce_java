@@ -17,21 +17,13 @@ public class User {
     private String email;
     @Column(name="password")
     private String password;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private AuthenticationToken token;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<WishList> wishLists;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Cart cart;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Review> reviews;
+
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
     }
-
     public User() {
     }
 
@@ -73,29 +65,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public AuthenticationToken getToken() {
-        return token;
-    }
-
-    public void setToken(AuthenticationToken token) {
-        this.token = token;
-    }
-
-    public List<WishList> getWishLists() {
-        return wishLists;
-    }
-
-    public void setWishLists(List<WishList> wishLists) {
-        this.wishLists = wishLists;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
     }
 }
