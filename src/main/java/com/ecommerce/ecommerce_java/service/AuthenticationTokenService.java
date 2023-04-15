@@ -1,10 +1,10 @@
 package com.ecommerce.ecommerce_java.service;
 
-import com.ecommerce.ecommerce_java.exceptions.AuthFailException;
+import com.ecommerce.ecommerce_java.exceptions.AuthException;
 import com.ecommerce.ecommerce_java.exceptions.NotFoundException;
-import com.ecommerce.ecommerce_java.model.AuthenticationToken;
+import com.ecommerce.ecommerce_java.model.AuthenticationTokens;
 import com.ecommerce.ecommerce_java.model.User;
-import com.ecommerce.ecommerce_java.repository.TokenRepo;
+import com.ecommerce.ecommerce_java.repository.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,20 +13,20 @@ import java.util.Objects;
 @Service
 public class AuthenticationTokenService {
     @Autowired
-    TokenRepo tokenRepo;
-    public void saveToken(AuthenticationToken authenticationToken) {
-        tokenRepo.save(authenticationToken);
+    TokenRepository tokenRepository;
+    public void saveToken(AuthenticationTokens authenticationTokens) {
+        tokenRepository.save(authenticationTokens);
     }
 
-    public AuthenticationToken getToken(User user) {
-        return tokenRepo.findByUser(user);
+    public AuthenticationTokens getToken(User user) {
+        return tokenRepository.findByUser(user);
     }
     public User getUser(String token){
-        AuthenticationToken authenticationToken = tokenRepo.findByToken(token);
-        if(Objects.isNull(authenticationToken)){
+        AuthenticationTokens authenticationTokens = tokenRepository.findByToken(token);
+        if(Objects.isNull(authenticationTokens)){
             return null;
         }
-        return authenticationToken.getUser();
+        return authenticationTokens.getUser();
     }
     public void authenticate(String token) throws NotFoundException{
         //null check
@@ -34,7 +34,7 @@ public class AuthenticationTokenService {
             throw new NotFoundException("Not Token");
         }
         if(Objects.isNull(getUser(token))){
-            throw new AuthFailException("token not valid");
+            throw new AuthException("token not valid");
         }
     }
 }

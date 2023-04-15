@@ -1,11 +1,10 @@
 package com.ecommerce.ecommerce_java.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "carts")
-public class Cart {
+public class Carts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cart_id;
@@ -14,7 +13,7 @@ public class Cart {
     private User user;
     private double totalPrice;
 
-    public Cart() {
+    public Carts() {
     }
 
     public Integer getCart_id() {

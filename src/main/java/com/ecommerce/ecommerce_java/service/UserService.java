@@ -4,12 +4,12 @@ import com.ecommerce.ecommerce_java.dto.ResponseDto;
 import com.ecommerce.ecommerce_java.dto.user.SignInDto;
 import com.ecommerce.ecommerce_java.dto.user.SigninResponseDto;
 import com.ecommerce.ecommerce_java.dto.user.SignUpDto;
-import com.ecommerce.ecommerce_java.exceptions.AuthFailException;
+import com.ecommerce.ecommerce_java.exceptions.AuthException;
 import com.ecommerce.ecommerce_java.exceptions.CustomException;
 import com.ecommerce.ecommerce_java.exceptions.NotFoundException;
-import com.ecommerce.ecommerce_java.model.AuthenticationToken;
+import com.ecommerce.ecommerce_java.model.AuthenticationTokens;
 import com.ecommerce.ecommerce_java.model.User;
-import com.ecommerce.ecommerce_java.repository.UserRepo;
+import com.ecommerce.ecommerce_java.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +23,11 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepository;
     @Autowired
     AuthenticationTokenService authenticationTokenService;
     public ResponseDto signUp(SignUpDto signUpDto) throws NoSuchAlgorithmException, CustomException {
-        User user = userRepo.findByEmail(signUpDto.getEmail());
+        User user = userRepository.findByEmail(signUpDto.getEmail());
         if(Objects.nonNull(user)){
             throw new CustomException("user aleady present");
         }
@@ -46,10 +46,10 @@ public class UserService {
                 signUpDto.getEmail(),
                 encryptedpassword
         );
-        userRepo.save(createUser);
+        userRepository.save(createUser);
 
-        final AuthenticationToken authenticationToken = new AuthenticationToken(createUser);
-        authenticationTokenService.saveToken(authenticationToken);
+        final AuthenticationTokens authenticationTokens = new AuthenticationTokens(createUser);
+        authenticationTokenService.saveToken(authenticationTokens);
 
         ResponseDto responseDto = new ResponseDto("success", "user created successfully");
         return responseDto;
@@ -65,19 +65,19 @@ public class UserService {
     }
 
     public SigninResponseDto signIn(SignInDto signInDto) throws NoSuchAlgorithmException {
-        User user = userRepo.findByEmail(signInDto.getEmail());
+        User user = userRepository.findByEmail(signInDto.getEmail());
         if(Objects.isNull(user)){
             throw new NotFoundException("Not found user");
         }
         try{
             if(!user.getPassword().equals(hashPassword(signInDto.getPassword()))){
-                throw new AuthFailException("wrong password");
+                throw new AuthException("wrong password");
             }
         }
         catch (NoSuchAlgorithmException e){
             e.printStackTrace();
         }
-        AuthenticationToken token = authenticationTokenService.getToken(user);
+        AuthenticationTokens token = authenticationTokenService.getToken(user);
         if(Objects.isNull(token)){
             throw new NotFoundException("token is not present");
         }
@@ -86,14 +86,14 @@ public class UserService {
 
     @Transactional
     public ResponseDto deleteUser(Integer id) {
-        Optional<User> optionalUser = userRepo.findById(id);
+        Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isEmpty()){
             throw new NotFoundException("User Not Found");
         }
 
 //        userRepo.deleteTokenByUser(optionalUser.get().getId());
 
-        userRepo.deleteById(optionalUser.get().getId());
+        userRepository.deleteById(optionalUser.get().getId());
         return new ResponseDto("OK", "Deleted successfully");
     }
 }

@@ -1,7 +1,7 @@
 package com.ecommerce.ecommerce_java.service;
 
-import com.ecommerce.ecommerce_java.model.Category;
-import com.ecommerce.ecommerce_java.repository.CatetoryRepo;
+import com.ecommerce.ecommerce_java.model.Categorys;
+import com.ecommerce.ecommerce_java.repository.CatetoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,22 +10,22 @@ import java.util.List;
 @Service
 public class CategoryService {
     @Autowired
-    CatetoryRepo catetoryRepo;
-    public void createCategory(Category category){
-        catetoryRepo.save(category);
+    CatetoryRepository catetoryRepository;
+    public void createCategory(Categorys categorys){
+        catetoryRepository.save(categorys);
     }
-    public List<Category> listCategory(){
-        return catetoryRepo.findAll();
+    public List<Categorys> listCategory(){
+        return catetoryRepository.findAll();
     }
 
-    public void updateCategory(int id, Category updateCategory) {
-        Category category = catetoryRepo.getById(id);
-        category.setCategoryName(updateCategory.getCategoryName());
-        category.setDescription(updateCategory.getDescription());
-        catetoryRepo.save(category);
+    public void updateCategory(int id, Categorys updateCategorys) {
+        Categorys categorys = catetoryRepository.getById(id);
+        categorys.setCategoryName(updateCategorys.getCategoryName());
+        categorys.setDescription(updateCategorys.getDescription());
+        catetoryRepository.save(categorys);
     }
 
     public boolean findCategoryById(int id) {
-        return catetoryRepo.findById(id).isPresent();
+        return catetoryRepository.findById(id).isPresent();
     }
 }

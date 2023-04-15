@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="category")
-public class Category {
+public class Categorys {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -5,8 +5,8 @@ import com.ecommerce.ecommerce_java.exceptions.NotFoundException;
 import com.ecommerce.ecommerce_java.model.Product;
 import com.ecommerce.ecommerce_java.model.Review;;
 import com.ecommerce.ecommerce_java.model.User;
-import com.ecommerce.ecommerce_java.repository.ProductRepo;
-import com.ecommerce.ecommerce_java.repository.ReviewRepo;
+import com.ecommerce.ecommerce_java.repository.ProductRepository;
+import com.ecommerce.ecommerce_java.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +15,14 @@ import java.util.*;
 @Service
 public class ReviewService {
     @Autowired
-    ReviewRepo reviewRepo;
+    ReviewRepository reviewRepository;
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepository;
     HashMap<Integer, Set<Integer>> productReviewMap = new HashMap<>();
     public void createReview(User user, Integer productId, String comment, int rating) {
-        Product product = productRepo.findById(productId).orElseThrow(() ->
+        Product product = productRepository.findById(productId).orElseThrow(() ->
                 new NotFoundException("Not found product"));
-        List<Review> reviews = reviewRepo.findByProduct(product);
+        List<Review> reviews = reviewRepository.findByProduct(product);
         for(Review review : reviews){
             if(productReviewMap.containsKey(product.getId())){
                 Set<Integer> userIdSet = productReviewMap.get(product.getId());
@@ -46,15 +46,18 @@ public class ReviewService {
                 review.setProduct(product);
                 review.setRating(rating);
                 review.setComment(comment);
-                reviewRepo.save(review);
+                reviewRepository.save(review);
+                reviews.add(review);
                 int numReviews = reviews.size();
                 int subTotalReview = reviews
                                     .stream()
-                                    .reduce(0, (subTotal, r) -> subTotal + r.getRating(), Integer::sum);
+                                    .reduce(0, (subTotal, r) ->
+                                                    subTotal + r.getRating(),
+                                                    Integer::sum);
                 double productRating = Math.round((double) subTotalReview/numReviews * 10.0)/10.0;
                 product.setRating(productRating);
                 product.setNumberReviews(numReviews);
-                productRepo.save(product);
+                productRepository.save(product);
             }
         }
         else {
@@ -63,11 +66,11 @@ public class ReviewService {
             review.setProduct(product);
             review.setRating(rating);
             review.setComment(comment);
-            reviewRepo.save(review);
+            reviewRepository.save(review);
 
             product.setRating(rating);
             product.setNumberReviews(1);
-            productRepo.save(product);
+            productRepository.save(product);
         }
     }
 }

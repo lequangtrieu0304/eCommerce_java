@@ -4,10 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name="products")
@@ -21,16 +17,16 @@ public class Product {
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name="category_id")
-    Category category;
+    Categorys categorys;
     private double rating;
     private int numberReviews;
 
-    public Product(Integer id, String name, double price, String desciption, Category category) {
+    public Product(Integer id, String name, double price, String desciption, Categorys categorys) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.desciption = desciption;
-        this.category = category;
+        this.categorys = categorys;
     }
     public Product() {
     }
@@ -67,12 +63,12 @@ public class Product {
         this.desciption = desciption;
     }
 
-    public Category getCategory() {
-        return category;
+    public Categorys getCategory() {
+        return categorys;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(Categorys categorys) {
+        this.categorys = categorys;
     }
 
     public double getRating() {

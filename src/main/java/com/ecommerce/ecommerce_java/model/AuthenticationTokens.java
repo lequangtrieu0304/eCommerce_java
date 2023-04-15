@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name="tokens")
-public class AuthenticationToken {
+public class AuthenticationTokens {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -17,15 +17,13 @@ public class AuthenticationToken {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
-    public AuthenticationToken(User user){
+    public AuthenticationTokens(User user){
         this.user = user;
         this.createdDate = new Date();
         this.token = UUID.randomUUID().toString();
     }
-
-    public AuthenticationToken() {
+    public AuthenticationTokens() {
     }
-
     public Integer getId() {
         return id;
     }

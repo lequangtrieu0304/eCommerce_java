@@ -1,7 +1,7 @@
 package com.ecommerce.ecommerce_java.controller;
 
 import com.ecommerce.ecommerce_java.common.ApiResponse;
-import com.ecommerce.ecommerce_java.exceptions.AuthFailException;
+import com.ecommerce.ecommerce_java.exceptions.AuthException;
 import com.ecommerce.ecommerce_java.model.Product;
 import com.ecommerce.ecommerce_java.model.User;
 import com.ecommerce.ecommerce_java.model.WishList;
@@ -38,7 +38,7 @@ public class WishListController {
         authenticationTokenService.authenticate(token);
         User user = authenticationTokenService.getUser(token);
         if(Objects.isNull(user)){
-            throw new AuthFailException("Ban chua login");
+            throw new AuthException("Ban chua login");
         }
         wishListService.deleteWishList(id);
         return new ResponseEntity<>(new ApiResponse(true, "Deleted successully"), HttpStatus.OK);

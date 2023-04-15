@@ -2,9 +2,9 @@ package com.ecommerce.ecommerce_java.controller;
 
 import com.ecommerce.ecommerce_java.common.ApiResponse;
 import com.ecommerce.ecommerce_java.dto.ProductDto;
-import com.ecommerce.ecommerce_java.model.Category;
+import com.ecommerce.ecommerce_java.model.Categorys;
 import com.ecommerce.ecommerce_java.model.Product;
-import com.ecommerce.ecommerce_java.repository.CatetoryRepo;
+import com.ecommerce.ecommerce_java.repository.CatetoryRepository;
 import com.ecommerce.ecommerce_java.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +20,10 @@ public class ProductController {
     @Autowired
     ProductService productService;
     @Autowired
-    CatetoryRepo catetoryRepo;
+    CatetoryRepository catetoryRepository;
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createProduct(@RequestBody ProductDto productDto){
-        Optional<Category> optionalCategory = catetoryRepo.findById(productDto.getCategoryId());
+        Optional<Categorys> optionalCategory = catetoryRepository.findById(productDto.getCategoryId());
         if(!optionalCategory.isPresent()){
             return new ResponseEntity<>(new ApiResponse(false, "category does not exist"), HttpStatus.BAD_REQUEST);
         }
@@ -44,7 +44,7 @@ public class ProductController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable("id") Integer id, @RequestBody ProductDto productDto) throws Exception {
-        Optional<Category> optionalCategory = catetoryRepo.findById(productDto.getCategoryId());
+        Optional<Categorys> optionalCategory = catetoryRepository.findById(productDto.getCategoryId());
         if(!optionalCategory.isPresent()){
             return new ResponseEntity<>(new ApiResponse(false, "category does not exist"), HttpStatus.BAD_REQUEST);
         }
